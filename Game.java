@@ -146,7 +146,7 @@ public class Game
     private void printHelp() 
     {
         System.out.println("Estás perdido. Estás sangrando. Pero estás callado.");
-        System.out.println("Deambulas por las instalaciones.");
+        System.out.println("Deambulas por las instalaciones (aunque llevas trabajando aquí 3 años).");
         System.out.println();
         System.out.println("Los comandos son: ");
         System.out.println("   ir salir ayuda");
