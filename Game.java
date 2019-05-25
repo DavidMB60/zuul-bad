@@ -93,18 +93,7 @@ public class Game
         System.out.println();
         System.out.println("Estás en: " + currentRoom.getDescription());
         System.out.print("Salidas: ");
-        if(currentRoom.northExit != null) {
-            System.out.print("norte ");
-        }
-        if(currentRoom.eastExit != null) {
-            System.out.print("este ");
-        }
-        if(currentRoom.southExit != null) {
-            System.out.print("sur ");
-        }
-        if(currentRoom.westExit != null) {
-            System.out.print("oeste ");
-        }
+        printLocationInfo();
         System.out.println();
     }
 
@@ -188,18 +177,7 @@ public class Game
             currentRoom = nextRoom;
             System.out.println("Estas en: " + currentRoom.getDescription());
             System.out.print("Salidas: ");
-            if(currentRoom.northExit != null) {
-                System.out.print("norte ");
-            }
-            if(currentRoom.eastExit != null) {
-                System.out.print("este ");
-            }
-            if(currentRoom.southExit != null) {
-                System.out.print("sur ");
-            }
-            if(currentRoom.westExit != null) {
-                System.out.print("oeste ");
-            }
+            printLocationInfo();
             System.out.println();
         }
     }
@@ -217,6 +195,25 @@ public class Game
         }
         else {
             return true;  // signal that we want to quit
+        }
+    }
+    
+    /**
+     *  Este método imprime las salidad disponibles en cada habitación que nos
+     *  encontremos.
+     */
+    private void printLocationInfo() {
+        if(currentRoom.northExit != null) {
+            System.out.print("norte ");
+        }
+        if(currentRoom.eastExit != null) {
+            System.out.print("este ");
+        }
+        if(currentRoom.southExit != null) {
+            System.out.print("sur ");
+        }
+        if(currentRoom.westExit != null) {
+            System.out.print("oeste ");
         }
     }
 }
