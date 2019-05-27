@@ -92,7 +92,6 @@ public class Game
         System.out.println("Escribe 'ayuda' si necesitas asistencia.");
         System.out.println();
         System.out.println("Estás en: " + currentRoom.getDescription());
-        System.out.print("Salidas: ");
         printLocationInfo();
         System.out.println();
     }
@@ -157,29 +156,14 @@ public class Game
 
         // Try to leave current room.
         Room nextRoom = null;
-        if(direction.equals("norte")) {
-            nextRoom = currentRoom.northExit;
-        }
-        if(direction.equals("este")) {
-            nextRoom = currentRoom.eastExit;
-        }
-        if(direction.equals("sur")) {
-            nextRoom = currentRoom.southExit;
-        }
-        if(direction.equals("oeste")) {
-            nextRoom = currentRoom.westExit;
-        }
-        if (direction.equals("sureste")) {
-            nextRoom = currentRoom.suresteExit;
-        }
+        nextRoom = currentRoom.getExit(direction);
 
         if (nextRoom == null) {
-            System.out.println("¿No hay salida!");
+            System.out.println("¡No hay salida!");
         }
         else {
             currentRoom = nextRoom;
             System.out.println("Estas en: " + currentRoom.getDescription());
-            System.out.print("Salidas: ");
             printLocationInfo();
             System.out.println();
         }
@@ -206,20 +190,6 @@ public class Game
      *  encontremos.
      */
     private void printLocationInfo() {
-        if(currentRoom.northExit != null) {
-            System.out.print("norte ");
-        }
-        if(currentRoom.eastExit != null) {
-            System.out.print("este ");
-        }
-        if(currentRoom.southExit != null) {
-            System.out.print("sur ");
-        }
-        if(currentRoom.westExit != null) {
-            System.out.print("oeste ");
-        }
-        if (currentRoom.suresteExit != null) {
-            System.out.print("sureste ");
-        }
+        System.out.print(currentRoom.getExitString());
     }
 }
