@@ -49,16 +49,16 @@ public class Game
         almacen = new Room("el almacén del nivel 3");
         easterEgg = new Room("no deberías estar aquí...");
         
-        // initialise room exits
-        spawn.setExits(null, seguridad, null, null);
-        seguridad.setExits(laboratorio, contencion, null, spawn);
-        contencion.setExits(null, anexo, null, seguridad);
-        anexo.setExits(null, lobby, null, contencion);
-        lobby.setExits(null, recepcion, null, anexo);
-        recepcion.setExits(null, null, null, lobby);
-        almacen.setExits(null, laboratorio, null, null);
-        laboratorio.setExits(null, serverRoom, seguridad, almacen);
-        serverRoom.setExits(null, null, null, laboratorio);
+        // initialise room exits (norte, este, sur, oeste, sureste)
+        spawn.setExits(null, seguridad, null, null, null);
+        seguridad.setExits(laboratorio, contencion, null, spawn, null);
+        contencion.setExits(null, anexo, null, seguridad, null);
+        anexo.setExits(null, lobby, null, contencion, easterEgg);
+        lobby.setExits(null, recepcion, null, anexo, null);
+        recepcion.setExits(null, null, null, lobby, null);
+        almacen.setExits(null, laboratorio, null, null, null);
+        laboratorio.setExits(null, serverRoom, seguridad, almacen, null);
+        serverRoom.setExits(null, null, null, laboratorio, null);
         
         currentRoom = spawn;  // start game outside
     }
@@ -169,6 +169,9 @@ public class Game
         if(direction.equals("oeste")) {
             nextRoom = currentRoom.westExit;
         }
+        if (direction.equals("sureste")) {
+            nextRoom = currentRoom.suresteExit;
+        }
 
         if (nextRoom == null) {
             System.out.println("¿No hay salida!");
@@ -214,6 +217,9 @@ public class Game
         }
         if(currentRoom.westExit != null) {
             System.out.print("oeste ");
+        }
+        if (currentRoom.suresteExit != null) {
+            System.out.print("sureste ");
         }
     }
 }
