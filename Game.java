@@ -35,7 +35,7 @@ public class Game
     private void createRooms()
     {
         Room spawn, seguridad, contencion, anexo, lobby, recepcion;
-        Room laboratorio, serverRoom, almacen, easterEgg;
+        Room laboratorio, serverRoom, almacen, easterEgg, armeria;
       
         // create the rooms
         spawn = new Room("en el interior de una oficina");
@@ -48,17 +48,19 @@ public class Game
         serverRoom = new Room("la localización de los servidores del complejo");
         almacen = new Room("el almacén del nivel 3");
         easterEgg = new Room("no deberías estar aquí...");
+        armeria = new Room("armería de seguridad");
         
-        // initialise room exits (norte, este, sur, oeste, sureste)
-        spawn.setExits(null, seguridad, null, null, null);
-        seguridad.setExits(laboratorio, contencion, null, spawn, null);
-        contencion.setExits(null, anexo, null, seguridad, null);
-        anexo.setExits(null, lobby, null, contencion, easterEgg);
-        lobby.setExits(null, recepcion, null, anexo, null);
-        recepcion.setExits(null, null, null, lobby, null);
-        almacen.setExits(null, laboratorio, null, null, null);
-        laboratorio.setExits(null, serverRoom, seguridad, almacen, null);
-        serverRoom.setExits(null, null, null, laboratorio, null);
+        // initialise room exits (norte, este, sur, oeste, sureste, noroeste)
+        spawn.setExits(null, seguridad, null, null, null, null);
+        seguridad.setExits(laboratorio, contencion, null, spawn, null, null);
+        contencion.setExits(null, anexo, null, seguridad, null, null);
+        anexo.setExits(null, lobby, null, contencion, easterEgg, armeria);
+        lobby.setExits(null, recepcion, null, anexo, null, null);
+        recepcion.setExits(null, null, null, lobby, null, null);
+        almacen.setExits(null, laboratorio, null, null, null, null);
+        laboratorio.setExits(null, serverRoom, seguridad, almacen, null, null);
+        serverRoom.setExits(null, null, null, laboratorio, null, null);
+        armeria.setExits(null, null, null, null, anexo, null);
         
         currentRoom = spawn;  // start game outside
     }
