@@ -38,24 +38,33 @@ public class Game
         Room laboratorio, serverRoom, almacen, easterEgg, armeria;
         Item keycard, phone, hdd, glock9;
         
-        // crear los objetos
+        // Crear los objetos
         keycard = new Item("Tarjeta de seguridad de nivel 3", 100);
         phone = new Item("Un Samsung Galaxy Note 7; útil para explotar paredes", 150);
         hdd = new Item("Disco duro de 10TB, contiene información relacionada con el proyecto CK17", 500);
         glock9 = new Item("Glock 9MM cargada", 900);
+        
         // create the rooms (descripcion, objeto)
-        spawn = new Room("en el interior de una oficina", null);
-        seguridad = new Room("el pasillo de seguridad", keycard);
-        contencion = new Room("el sistema de contención", null);
-        anexo = new Room("el pasillo central del anexo", null);
-        lobby = new Room("la lobby principal del complejo Lambda", null);
-        recepcion = new Room("la recepcion al edificion principal", null);
-        laboratorio = new Room("el laboratorio de investigación principal del complejo Lambda", hdd);
-        serverRoom = new Room("la localización de los servidores del complejo", phone);
-        almacen = new Room("el almacén del nivel 3", null);
-        easterEgg = new Room("no deberías estar aquí...", null);
-        armeria = new Room("armería de seguridad", glock9);
-
+        
+        spawn = new Room("en el interior de una oficina");
+        seguridad = new Room("el pasillo de seguridad");
+        contencion = new Room("el sistema de contención");
+        anexo = new Room("el pasillo central del anexo");
+        lobby = new Room("la lobby principal del complejo Lambda");
+        recepcion = new Room("la recepcion al edificion principal");
+        laboratorio = new Room("el laboratorio de investigación principal del complejo Lambda");
+        serverRoom = new Room("la localización de los servidores del complejo");
+        almacen = new Room("el almacén del nivel 3");
+        easterEgg = new Room("no deberías estar aquí...");
+        armeria = new Room("armería de seguridad");
+        
+        // Agregar los objetos
+        
+        armeria.addItem(glock9);
+        contencion.addItem(keycard);
+        laboratorio.addItem(hdd);
+        spawn.addItem(phone);
+        
         // initialise room exits (norte, este, sur, oeste, sureste, noroeste)
         spawn.setExit("este", seguridad);
         seguridad.setExit("norte", laboratorio);
