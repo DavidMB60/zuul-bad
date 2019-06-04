@@ -132,6 +132,9 @@ public class Game
         else if (commandWord.equals("mirar")) {
             look();
         }
+        else if (commandWord.equals("comer")) {
+            System.out.println("Has comido y ya no tienes hambre");
+        }
 
         return wantToQuit;
     }
@@ -149,7 +152,7 @@ public class Game
         System.out.println("Deambulas por las instalaciones (aunque llevas trabajando aquí 3 años).");
         System.out.println();
         System.out.println("Los comandos son: ");
-        System.out.println("   ir salir ayuda mirar");
+        System.out.println("   ir salir ayuda mirar comer");
     }
 
     /** 
