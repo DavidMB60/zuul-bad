@@ -152,7 +152,7 @@ public class Game
         System.out.println("Deambulas por las instalaciones (aunque llevas trabajando aquí 3 años).");
         System.out.println();
         System.out.println("Los comandos son: ");
-        parser.showCommands();
+        System.out.println(parser.showCommands());
     }
 
     /** 
