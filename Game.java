@@ -129,6 +129,9 @@ public class Game
         else if (commandWord.equals("salir")) {
             wantToQuit = quit(command);
         }
+        else if (commandWord.equals("mirar")) {
+            look();
+        }
 
         return wantToQuit;
     }
@@ -146,7 +149,7 @@ public class Game
         System.out.println("Deambulas por las instalaciones (aunque llevas trabajando aquí 3 años).");
         System.out.println();
         System.out.println("Los comandos son: ");
-        System.out.println("   ir salir ayuda");
+        System.out.println("   ir salir ayuda mirar");
     }
 
     /** 
@@ -199,5 +202,14 @@ public class Game
      */
     private void printLocationInfo() {
         System.out.print(currentRoom.getLongDescription());
+    }
+
+    /**
+       Este método imprime la descripción de la sala en la que nos encontramos
+       y también muestra las salidas disponibles. (El comando aquí es "mirar"
+       en vez de "look")
+       */
+    private void look() {	
+        System.out.println(currentRoom.getLongDescription());
     }
 }
