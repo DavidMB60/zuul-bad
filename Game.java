@@ -19,6 +19,8 @@ public class Game
 {
     private Parser parser;
     private Room currentRoom;
+    private Room habitacionAnterior;
+    private int movimientos;
 
     /**
      * Create the game and initialise its internal map.
@@ -37,15 +39,15 @@ public class Game
         Room spawn, seguridad, contencion, anexo, lobby, recepcion;
         Room laboratorio, serverRoom, almacen, easterEgg, armeria;
         Item keycard, phone, hdd, glock9;
-        
+
         // Crear los objetos
         keycard = new Item("Tarjeta de seguridad de nivel 3", 100);
         phone = new Item("Un Samsung Galaxy Note 7; útil para explotar paredes", 150);
         hdd = new Item("Disco duro de 10TB, contiene información relacionada con el proyecto CK17", 500);
         glock9 = new Item("Glock 9MM cargada", 900);
-        
+
         // create the rooms (descripcion, objeto)
-        
+
         spawn = new Room("en el interior de una oficina");
         seguridad = new Room("el pasillo de seguridad");
         contencion = new Room("el sistema de contención");
@@ -57,14 +59,14 @@ public class Game
         almacen = new Room("el almacén del nivel 3");
         easterEgg = new Room("no deberías estar aquí...");
         armeria = new Room("armería de seguridad");
-        
+
         // Agregar los objetos
-        
+
         armeria.addItem(glock9);
         contencion.addItem(keycard);
         laboratorio.addItem(hdd);
         spawn.addItem(phone);
-        
+
         // initialise room exits (norte, este, sur, oeste, sureste, noroeste)
         spawn.setExit("este", seguridad);
         seguridad.setExit("norte", laboratorio);
@@ -116,6 +118,7 @@ public class Game
         System.out.println("Bienvenido a World of Zuul!");
         System.out.println("World of Zuul es un nuevo e increíblemente aburrido juego de aventuras.");
         System.out.println("Escribe 'ayuda' si necesitas asistencia.");
+        movimientos = 0;
         printLocationInfo();
         System.out.println();
     }
@@ -149,6 +152,9 @@ public class Game
         }
         else if (commandWord.equals("comer")) {
             System.out.println("Has comido y ya no tienes hambre");
+        }
+        else if (commandWord.equals("volver")) {
+            back();
         }
 
         return wantToQuit;
@@ -192,9 +198,11 @@ public class Game
             System.out.println("¡No hay salida!");
         }
         else {
+            habitacionAnterior = currentRoom;
             currentRoom = nextRoom;
             printLocationInfo();
             System.out.println();
+            movimientos++;
         }
     }
 
@@ -223,11 +231,25 @@ public class Game
     }
 
     /**
-       Este método imprime la descripción de la sala en la que nos encontramos
-       y también muestra las salidas disponibles. (El comando aquí es "mirar"
-       en vez de "look")
-       */
+    Este método imprime la descripción de la sala en la que nos encontramos
+    y también muestra las salidas disponibles. (El comando aquí es "mirar"
+    en vez de "look")
+     */
     private void look() {   
         System.out.println(currentRoom.getLongDescription());
+    }
+
+    private void back() {
+        if (habitacionAnterior != null && movimientos != 0) {
+            Room habitacionAnteriorTemp = habitacionAnterior;
+            habitacionAnterior = currentRoom;
+            currentRoom = habitacionAnteriorTemp;
+            printLocationInfo();
+            System.out.println();
+            movimientos = 0;
+        }
+        else {
+            System.out.println("¡No puedes volver atrás!");
+        }
     }
 }
