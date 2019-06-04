@@ -51,16 +51,25 @@ public class Game
         armeria = new Room("armería de seguridad");
         
         // initialise room exits (norte, este, sur, oeste, sureste, noroeste)
-        spawn.setExits(null, seguridad, null, null, null, null);
-        seguridad.setExits(laboratorio, contencion, null, spawn, null, null);
-        contencion.setExits(null, anexo, null, seguridad, null, null);
-        anexo.setExits(null, lobby, null, contencion, easterEgg, armeria);
-        lobby.setExits(null, recepcion, null, anexo, null, null);
-        recepcion.setExits(null, null, null, lobby, null, null);
-        almacen.setExits(null, laboratorio, null, null, null, null);
-        laboratorio.setExits(null, serverRoom, seguridad, almacen, null, null);
-        serverRoom.setExits(null, null, null, laboratorio, null, null);
-        armeria.setExits(null, null, null, null, anexo, null);
+        spawn.setExit("este", seguridad);
+        seguridad.setExit("norte", laboratorio);
+        seguridad.setExit("este", contencion);
+        seguridad.setExit("oeste", spawn);
+        contencion.setExit("este", anexo);
+        contencion.setExit("oeste", seguridad);
+        anexo.setExit("este", lobby);
+        anexo.setExit("oeste", contencion);
+        anexo.setExit("sureste", easterEgg);
+        anexo.setExit("noroeste", armeria);
+        lobby.setExit("este", recepcion);
+        lobby.setExit("oeste", anexo);
+        recepcion.setExit("oeste", recepcion);
+        almacen.setExit("este", laboratorio);
+        laboratorio.setExit("oeste", almacen);
+        laboratorio.setExit("sur", seguridad);
+        laboratorio.setExit("este", serverRoom);
+        serverRoom.setExit("oeste", laboratorio);
+        armeria.setExit("sureste", anexo);
         
         currentRoom = spawn;  // start game outside
     }

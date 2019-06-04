@@ -32,32 +32,6 @@ public class Room
     }
 
     /**
-     * Define the exits of this room.  Every direction either leads
-     * to another room or is null (no exit there).
-     * @param north The north exit.
-     * @param east The east east.
-     * @param south The south exit.
-     * @param west The west exit.
-     */
-    public void setExits(Room north, Room east, Room south, Room west, Room sureste, Room noroeste) 
-    {
-        if(north != null)
-            salidas.put("norte", north);
-        if(east != null)
-            salidas.put("este", east);
-        if(south != null)
-            salidas.put("sur", south);
-        if(west != null)
-            salidas.put("oeste", west);
-        if (sureste != null) {
-            salidas.put("sureste", sureste);
-        }
-        if (noroeste != null) {
-            salidas.put("noroeste", noroeste);
-        }
-    }
-
-    /**
      * @return The description of the room.
      */
     public String getDescription()
@@ -79,5 +53,14 @@ public class Room
      */
     public String getExitString() {
         return "Salidas: " + salidas.keySet();
+    }
+
+    /**
+     * Define una salida para la habitacion.
+     * @param direction El nombre de la direccion de la salida
+     * @param neighbor La habitacion a la que se llega usando esa salida
+     */
+    public void setExit(String direccion, Room roomVecina) {
+        salidas.put(direccion, roomVecina);
     }
 }
