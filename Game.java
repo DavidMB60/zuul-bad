@@ -19,7 +19,7 @@ public class Game
 {
     private Parser parser;
     private Room currentRoom;
-        
+
     /**
      * Create the game and initialise its internal map.
      */
@@ -36,7 +36,7 @@ public class Game
     {
         Room spawn, seguridad, contencion, anexo, lobby, recepcion;
         Room laboratorio, serverRoom, almacen, easterEgg, armeria;
-      
+
         // create the rooms
         spawn = new Room("en el interior de una oficina");
         seguridad = new Room("el pasillo de seguridad");
@@ -49,7 +49,7 @@ public class Game
         almacen = new Room("el almacén del nivel 3");
         easterEgg = new Room("no deberías estar aquí...");
         armeria = new Room("armería de seguridad");
-        
+
         // initialise room exits (norte, este, sur, oeste, sureste, noroeste)
         spawn.setExit("este", seguridad);
         seguridad.setExit("norte", laboratorio);
@@ -70,7 +70,7 @@ public class Game
         laboratorio.setExit("este", serverRoom);
         serverRoom.setExit("oeste", laboratorio);
         armeria.setExit("sureste", anexo);
-        
+
         currentRoom = spawn;  // start game outside
     }
 
@@ -83,7 +83,7 @@ public class Game
 
         // Enter the main command loop.  Here we repeatedly read commands and
         // execute them until the game is over.
-                
+
         boolean finished = false;
         while (! finished) {
             Command command = parser.getCommand();
@@ -101,8 +101,6 @@ public class Game
         System.out.println("Bienvenido a World of Zuul!");
         System.out.println("World of Zuul es un nuevo e increíblemente aburrido juego de aventuras.");
         System.out.println("Escribe 'ayuda' si necesitas asistencia.");
-        System.out.println();
-        System.out.println("Estás en: " + currentRoom.getDescription());
         printLocationInfo();
         System.out.println();
     }
@@ -174,7 +172,6 @@ public class Game
         }
         else {
             currentRoom = nextRoom;
-            System.out.println("Estas en: " + currentRoom.getDescription());
             printLocationInfo();
             System.out.println();
         }
@@ -195,12 +192,12 @@ public class Game
             return true;  // signal that we want to quit
         }
     }
-    
+
     /**
      *  Este método imprime las salidad disponibles en cada habitación que nos
      *  encontremos.
      */
     private void printLocationInfo() {
-        System.out.print(currentRoom.getExitString());
+        System.out.print(currentRoom.getLongDescription());
     }
 }
