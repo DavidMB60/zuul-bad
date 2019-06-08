@@ -1,4 +1,5 @@
 import java.util.Stack;
+import java.util.ArrayList;
 
 /**
  *  This class is the main class of the "World of Zuul" application. 
@@ -22,6 +23,7 @@ public class Game
     private Parser parser;
     private Room currentRoom;
     private Stack<Room> recorridoHabitaciones;
+    private ArrayList<Item> mochila;
 
     /**
      * Create the game and initialise its internal map.
@@ -39,13 +41,14 @@ public class Game
     {
         Room spawn, seguridad, contencion, anexo, lobby, recepcion;
         Room laboratorio, serverRoom, almacen, easterEgg, armeria;
-        Item keycard, phone, hdd, glock9;
+        Item keycard, phone, hdd, glock9, locker;
 
         // Crear los objetos
-        keycard = new Item("Tarjeta de seguridad de nivel 3", 100);
-        phone = new Item("Un Samsung Galaxy Note 7; útil para explotar paredes", 150);
-        hdd = new Item("Disco duro de 10TB, contiene información relacionada con el proyecto CK17", 500);
-        glock9 = new Item("Glock 9MM cargada", 900);
+        keycard = new Item("Tarjeta de seguridad de nivel 3", 100, "keycard", true);
+        phone = new Item("Un Samsung Galaxy Note 7; útil para explotar paredes", 150, "phone", true);
+        hdd = new Item("Disco duro de 10TB, contiene información relacionada con el proyecto CK17", 500, "hdd", true);
+        glock9 = new Item("Glock 9MM cargada", 900, "glock9", true);
+        locker = new Item("Armario con municiones; está bloqueando una salida de ventilación", 25000, "locker", false);
 
         // create the rooms (descripcion, objeto)
 
@@ -67,6 +70,7 @@ public class Game
         contencion.addItem(keycard);
         laboratorio.addItem(hdd);
         spawn.addItem(phone);
+        armeria.addItem(locker);
 
         // initialise room exits (norte, este, sur, oeste, sureste, noroeste)
         spawn.setExit("este", seguridad);
@@ -120,6 +124,7 @@ public class Game
         System.out.println("World of Zuul es un nuevo e increíblemente aburrido juego de aventuras.");
         System.out.println("Escribe 'ayuda' si necesitas asistencia.");
         recorridoHabitaciones = new Stack<Room>();
+        mochila = new ArrayList<Item>();
         printLocationInfo();
         System.out.println();
     }
@@ -156,6 +161,15 @@ public class Game
         }
         else if (commandWord.equals("volver")) {
             back();
+        }
+        else if (commandWord.equals("coger")) {
+            take(command);
+        }
+        else if (commandWord.equals("soltar")) {
+            drop(command);
+        }
+        else if (commandWord.equals("items")) {
+            verItems();
         }
 
         return wantToQuit;
@@ -247,6 +261,68 @@ public class Game
         }
         else {
             System.out.println("¡No puedes volver atrás!");
+        }
+    }
+
+    private void take(Command command) {
+        if(!command.hasSecondWord()) {
+            // if there is no second word, we don't know where to go...
+            System.out.println("¿Coger qué?");
+            return;
+        }
+
+        String objeto = command.getSecondWord();
+        Item objetoNuevo = null;
+        objetoNuevo = currentRoom.getItem(objeto);
+        if (objetoNuevo == null) {
+            System.out.println("¡El objeto no existe!");
+        }
+        else {
+            int pesoTotal = 0;
+            for (Item itemActual : mochila) {
+                pesoTotal += itemActual.getPeso();
+            }
+            if (pesoTotal < 10000 && currentRoom.getItem(objeto).getPeso() < 10000) {
+                currentRoom.delItem(objetoNuevo);
+                mochila.add(objetoNuevo);
+                System.out.println("Has cogido: " + objetoNuevo.getDescripcion());
+            }
+            else if (pesoTotal > 10000) {
+                System.out.println("¡No puedes llevar más!");
+            }
+            else {
+                System.out.println("¡El objeto pesa demasiado!");
+            }
+        }
+    }
+
+    private void drop(Command command) {
+        if(!command.hasSecondWord()) {
+            // if there is no second word, we don't know where to go...
+            System.out.println("¿Soltar qué?");
+            return;
+        }
+
+        String objeto = command.getSecondWord();
+        Item objetoNuevo = null;
+        for (Item itemActual : mochila) {
+            if (itemActual.getId().equals(objeto)) {
+                objetoNuevo = itemActual;
+            }
+        }
+        if (objetoNuevo == null) {
+            System.out.println("¡El objeto no existe!");
+        }
+        else {
+            mochila.remove(objetoNuevo);
+            currentRoom.addItem(objetoNuevo);
+            System.out.println("Has dejado: " + objetoNuevo.getDescripcion());
+        }
+    }
+    
+    private void verItems() {
+        for (Item itemActual : mochila) {
+            System.out.println("Objeto: " + itemActual.getDescripcion() + ". Peso: " + itemActual.getPeso() + "g." + "(" + itemActual.getId() + ")" + "\n");
         }
     }
 }

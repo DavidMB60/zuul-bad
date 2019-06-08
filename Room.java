@@ -78,7 +78,7 @@ public class Room
         descripcionARetornar += "Estas en: " + description + "\nSalidas: " + salidas.keySet();
         if (objetos.size() > 0) {
             for (Item objetoActual : objetos) {
-                descripcionARetornar += "\n Objeto: " + objetoActual.getDescripcion() + ". Peso: " + objetoActual.getPeso() + "g.\n";
+                descripcionARetornar += "\n Objeto: " + objetoActual.getDescripcion() + ". Peso: " + objetoActual.getPeso() + "g." + "(" + objetoActual.getId() + ")" + "\n";
             }
         }
         else {
@@ -89,5 +89,19 @@ public class Room
     
     public void addItem(Item objeto) {
         objetos.add(objeto);
+    }
+    
+    public Item getItem(String id) {
+        Item objetoADevolver = null;
+        for (Item itemActual : objetos) {
+            if (itemActual.getId().equals(id)) {
+                objetoADevolver = itemActual;
+            }
+        }
+        return objetoADevolver;
+    }
+    
+    public void delItem(Item objeto) {
+        objetos.remove(objeto);
     }
 }
