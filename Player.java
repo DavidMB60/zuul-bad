@@ -105,4 +105,31 @@ public class Player
             System.out.println("Objeto: " + itemActual.getDescripcion() + ".\n"); 
         }
     }
+    
+    public void dropItem(Command command) {
+        if(!command.hasSecondWord()) {
+            // if there is no second word, we don't know where to go...
+            System.out.println("¿Coger qué?");
+            return;
+        }
+
+        String direction = command.getSecondWord();
+
+        // Try to take the item
+        String objeto = command.getSecondWord();
+        Item objetoNuevo = null;
+        for (Item itemActual : mochila) {
+            if (itemActual.getId().equals(objeto)) {
+                objetoNuevo = itemActual;
+            }
+        }
+        if (objetoNuevo == null) {
+            System.out.println("¡El objeto no existe!");
+        }
+        else {
+            currentRoom.addItem(objetoNuevo);
+            mochila.remove(objetoNuevo);
+            System.out.println("Has soltado: " + objetoNuevo.getDescripcion());
+        }
+    }
 }

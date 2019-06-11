@@ -162,6 +162,9 @@ public class Game
         else if (commandWord.equals("items")) {
             jugador.listItems();
         }
+        else if (commandWord.equals("soltar")) {
+            jugador.dropItem(command);
+        }
 
         return wantToQuit;
     }
