@@ -20,32 +20,31 @@ import java.util.Stack;
 public class Game 
 {
     private Parser parser;
-    private Room currentRoom;
-    private Stack<Room> recorridoHabitaciones;
-
+    private Player jugador;
     /**
      * Create the game and initialise its internal map.
      */
     public Game() 
     {
-        createRooms();
         parser = new Parser();
+        jugador = new Player(createRooms());
     }
 
     /**
      * Create all the rooms and link their exits together.
      */
-    private void createRooms()
+    private Room createRooms()
     {
         Room spawn, seguridad, contencion, anexo, lobby, recepcion;
         Room laboratorio, serverRoom, almacen, easterEgg, armeria;
-        Item keycard, phone, hdd, glock9;
+        Item keycard, phone, hdd, glock9, armarioMuniciones;
 
-        // Crear los objetos
-        keycard = new Item("Tarjeta de seguridad de nivel 3", 100);
-        phone = new Item("Un Samsung Galaxy Note 7; útil para explotar paredes", 150);
-        hdd = new Item("Disco duro de 10TB, contiene información relacionada con el proyecto CK17", 500);
-        glock9 = new Item("Glock 9MM cargada", 900);
+        // Crear los objetos (id, descripcion, peso, loPuedesCoger?)
+        keycard = new Item("keycard", "Tarjeta de seguridad de nivel 3", 100, true);
+        phone = new Item("phone", "Un Samsung Galaxy Note 7; útil para explotar paredes", 150, true);
+        hdd = new Item("hdd", "Disco duro de 10TB, contiene información relacionada con el proyecto CK17", 500, true);
+        glock9 = new Item("glock9", "Glock 9MM cargada", 900, true);
+        armarioMuniciones = new Item("armario", "Armario con municiones y armamento", 25000, false);
 
         // create the rooms (descripcion, objeto)
 
@@ -62,8 +61,8 @@ public class Game
         armeria = new Room("armería de seguridad");
 
         // Agregar los objetos
-
         armeria.addItem(glock9);
+        armeria.addItem(armarioMuniciones);
         contencion.addItem(keycard);
         laboratorio.addItem(hdd);
         spawn.addItem(phone);
@@ -88,8 +87,8 @@ public class Game
         laboratorio.setExit("este", serverRoom);
         serverRoom.setExit("oeste", laboratorio);
         armeria.setExit("sureste", anexo);
-
-        currentRoom = spawn;  // start game outside
+        
+        return spawn;
     }
 
     /**
@@ -119,8 +118,7 @@ public class Game
         System.out.println("Bienvenido a World of Zuul!");
         System.out.println("World of Zuul es un nuevo e increíblemente aburrido juego de aventuras.");
         System.out.println("Escribe 'ayuda' si necesitas asistencia.");
-        recorridoHabitaciones = new Stack<Room>();
-        printLocationInfo();
+        jugador.look();
         System.out.println();
     }
 
@@ -143,19 +141,28 @@ public class Game
             printHelp();
         }
         else if (commandWord.equals("ir")) {
-            goRoom(command);
+            jugador.goRoom(command);
         }
         else if (commandWord.equals("salir")) {
             wantToQuit = quit(command);
         }
         else if (commandWord.equals("mirar")) {
-            look();
+            jugador.look();
         }
         else if (commandWord.equals("comer")) {
-            System.out.println("Has comido y ya no tienes hambre");
+            jugador.comer();
         }
         else if (commandWord.equals("volver")) {
-            back();
+            jugador.back();
+        }
+        else if (commandWord.equals("coger")) {
+            jugador.take(command);
+        }
+        else if (commandWord.equals("items")) {
+            jugador.listItems();
+        }
+        else if (commandWord.equals("soltar")) {
+            jugador.dropItem(command);
         }
 
         return wantToQuit;
@@ -178,35 +185,6 @@ public class Game
     }
 
     /** 
-     * Try to go in one direction. If there is an exit, enter
-     * the new room, otherwise print an error message.
-     */
-    private void goRoom(Command command) 
-    {
-        if(!command.hasSecondWord()) {
-            // if there is no second word, we don't know where to go...
-            System.out.println("¿Ir a donde?");
-            return;
-        }
-
-        String direction = command.getSecondWord();
-
-        // Try to leave current room.
-        Room nextRoom = null;
-        nextRoom = currentRoom.getExit(direction);
-
-        if (nextRoom == null) {
-            System.out.println("¡No hay salida!");
-        }
-        else {
-            recorridoHabitaciones.push(currentRoom);
-            currentRoom = nextRoom;
-            printLocationInfo();
-            System.out.println();
-        }
-    }
-
-    /** 
      * "Quit" was entered. Check the rest of the command to see
      * whether we really quit the game.
      * @return true, if this command quits the game, false otherwise.
@@ -219,34 +197,6 @@ public class Game
         }
         else {
             return true;  // signal that we want to quit
-        }
-    }
-
-    /**
-     *  Este método imprime las salidad disponibles en cada habitación que nos
-     *  encontremos.
-     */
-    private void printLocationInfo() {
-        System.out.print(currentRoom.getLongDescription());
-    }
-
-    /**
-    Este método imprime la descripción de la sala en la que nos encontramos
-    y también muestra las salidas disponibles. (El comando aquí es "mirar"
-    en vez de "look")
-     */
-    private void look() {   
-        System.out.println(currentRoom.getLongDescription());
-    }
-
-    private void back() {
-        if (!recorridoHabitaciones.empty()) {
-            currentRoom = recorridoHabitaciones.pop();
-            printLocationInfo();
-            System.out.println();
-        }
-        else {
-            System.out.println("¡No puedes volver atrás!");
         }
     }
 }
