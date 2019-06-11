@@ -61,7 +61,6 @@ public class Game
         armeria = new Room("armería de seguridad");
 
         // Agregar los objetos
-
         armeria.addItem(glock9);
         armeria.addItem(armarioMuniciones);
         contencion.addItem(keycard);
