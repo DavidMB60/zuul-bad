@@ -99,4 +99,10 @@ public class Player
             }
         }
     }
+    
+    public void listItems() {
+        for (Item itemActual : mochila) {
+            System.out.println("Objeto: " + itemActual.getDescripcion() + ".\n"); 
+        }
+    }
 }
