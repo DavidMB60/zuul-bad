@@ -37,13 +37,14 @@ public class Game
     {
         Room spawn, seguridad, contencion, anexo, lobby, recepcion;
         Room laboratorio, serverRoom, almacen, easterEgg, armeria;
-        Item keycard, phone, hdd, glock9;
+        Item keycard, phone, hdd, glock9, armarioMuniciones;
 
-        // Crear los objetos
-        keycard = new Item("keycard", "Tarjeta de seguridad de nivel 3", 100);
-        phone = new Item("phone", "Un Samsung Galaxy Note 7; útil para explotar paredes", 150);
-        hdd = new Item("hdd", "Disco duro de 10TB, contiene información relacionada con el proyecto CK17", 500);
-        glock9 = new Item("glock9", "Glock 9MM cargada", 900);
+        // Crear los objetos (id, descripcion, peso, loPuedesCoger?)
+        keycard = new Item("keycard", "Tarjeta de seguridad de nivel 3", 100, true);
+        phone = new Item("phone", "Un Samsung Galaxy Note 7; útil para explotar paredes", 150, true);
+        hdd = new Item("hdd", "Disco duro de 10TB, contiene información relacionada con el proyecto CK17", 500, true);
+        glock9 = new Item("glock9", "Glock 9MM cargada", 900, true);
+        armarioMuniciones = new Item("armario", "Armario con municiones y armamento", 25000, false);
 
         // create the rooms (descripcion, objeto)
 
@@ -62,6 +63,7 @@ public class Game
         // Agregar los objetos
 
         armeria.addItem(glock9);
+        armeria.addItem(armarioMuniciones);
         contencion.addItem(keycard);
         laboratorio.addItem(hdd);
         spawn.addItem(phone);

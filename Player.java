@@ -89,8 +89,14 @@ public class Player
             System.out.println("¡El objeto no existe!");
         }
         else {
-            mochila.add(objetoNuevo);
-            currentRoom.delItem(objetoNuevo);
+            if (objetoNuevo.canTakeIt()) {
+                mochila.add(objetoNuevo);
+                currentRoom.delItem(objetoNuevo);
+                System.out.println("Has cogido: " + objetoNuevo.getDescripcion());
+            }
+            else {
+                System.out.println("¡No puedes coger ese objeto!");
+            }
         }
     }
 }
