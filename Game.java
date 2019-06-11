@@ -40,10 +40,10 @@ public class Game
         Item keycard, phone, hdd, glock9;
 
         // Crear los objetos
-        keycard = new Item("Tarjeta de seguridad de nivel 3", 100);
-        phone = new Item("Un Samsung Galaxy Note 7; útil para explotar paredes", 150);
-        hdd = new Item("Disco duro de 10TB, contiene información relacionada con el proyecto CK17", 500);
-        glock9 = new Item("Glock 9MM cargada", 900);
+        keycard = new Item("keycard", "Tarjeta de seguridad de nivel 3", 100);
+        phone = new Item("phone", "Un Samsung Galaxy Note 7; útil para explotar paredes", 150);
+        hdd = new Item("hdd", "Disco duro de 10TB, contiene información relacionada con el proyecto CK17", 500);
+        glock9 = new Item("glock9", "Glock 9MM cargada", 900);
 
         // create the rooms (descripcion, objeto)
 
@@ -153,6 +153,9 @@ public class Game
         }
         else if (commandWord.equals("volver")) {
             jugador.back();
+        }
+        else if (commandWord.equals("coger")) {
+            jugador.take(command);
         }
 
         return wantToQuit;
