@@ -14,6 +14,7 @@ public class Player
     private Stack<Room> recorridoHabitaciones;
     private ArrayList<Item> mochila;
     private int capacidad;
+    private int objectsLimit;
 
     /**
      * Constructor for objects of class Player
@@ -24,6 +25,7 @@ public class Player
         this.currentRoom = currentRoom;
         mochila = new ArrayList<Item>();
         capacidad = 15000;
+        objectsLimit = 20;
     }
 
     public void goRoom(Command command) {
@@ -43,10 +45,20 @@ public class Player
             System.out.println("¡No hay salida!");
         }
         else {
-            recorridoHabitaciones.push(currentRoom);
-            currentRoom = nextRoom;
-            look();
-            System.out.println();
+            if (currentRoom.getDescription().equals("salida")) {
+                System.out.println("¿Para qué querrías volver a entrar?");
+            }
+            else {
+                recorridoHabitaciones.push(currentRoom);
+                currentRoom = nextRoom;
+                if (currentRoom.getDescription().equals("salida")) {
+                    System.out.println("Has salido con éxito");
+                }
+                else {
+                    look();
+                    System.out.println();
+                }
+            }
         }
     }
 
@@ -61,9 +73,14 @@ public class Player
 
     public void back() {
         if (!recorridoHabitaciones.empty()) {
-            currentRoom = recorridoHabitaciones.pop();
-            look();
-            System.out.println();
+            if (currentRoom.getDescription().equals("salida")) {
+                System.out.println("¿Para qué querrías volver?");
+            }
+            else {
+                currentRoom = recorridoHabitaciones.pop();
+                look();
+                System.out.println();
+            }
         }
         else {
             System.out.println("¡No puedes volver atrás!");
@@ -81,8 +98,6 @@ public class Player
             return;
         }
 
-        String direction = command.getSecondWord();
-
         // Try to take the item
         String objeto = command.getSecondWord();
         Item objetoNuevo = null;
@@ -93,13 +108,21 @@ public class Player
         else {
             if (objetoNuevo.canTakeIt()) {
                 if (capacidad > 0 && (capacidad - objetoNuevo.getPeso() >= 0)) {
-                    mochila.add(objetoNuevo);
-                    capacidad -= objetoNuevo.getPeso();
-                    currentRoom.delItem(objetoNuevo);
-                    System.out.println("Has cogido: " + objetoNuevo.getDescripcion());
+                    if (objectsLimit > 0) {
+                        mochila.add(objetoNuevo);
+                        capacidad -= objetoNuevo.getPeso();
+                        currentRoom.delItem(objetoNuevo);
+                        objectsLimit--;
+                        System.out.println("Has cogido: " + objetoNuevo.getDescripcion());
+                        System.out.println("Puedes llevar " + objectsLimit + " objetos.");
+                    }
+                    else if (objectsLimit == 0) {
+                        System.out.println("¡No puedes llevar más objetos!");
+                    }
                 }
                 else {
-                    System.out.println("¡Has superado el peso máximo! Capacidad restante: " + capacidad);
+                    System.out.println("Puedes llevar " + objectsLimit + " objetos.");
+                    System.out.println("Capacidad restante: " + capacidad);
                 }
             }
             else {
@@ -117,6 +140,7 @@ public class Player
                 System.out.println("Objeto: " + itemActual.getDescripcion() + " " + itemActual.getPeso() + "g" + ".\n"); 
             }
         }
+        System.out.println("Puedes llevar " + objectsLimit + " objetos.");
         System.out.println("Capacidad actual: " + capacidad);
     }
 
@@ -126,8 +150,6 @@ public class Player
             System.out.println("¿Coger qué?");
             return;
         }
-
-        String direction = command.getSecondWord();
 
         // Try to take the item
         String objeto = command.getSecondWord();
@@ -143,9 +165,48 @@ public class Player
         else {
             currentRoom.addItem(objetoNuevo);
             mochila.remove(objetoNuevo);
+            objectsLimit++;
             capacidad += objetoNuevo.getPeso();
             System.out.println("Has soltado: " + objetoNuevo.getDescripcion());
             System.out.println("Capacidad actual: " + capacidad);
+            System.out.println("Puedes llevar " + objectsLimit + " objetos.");
+        }
+    }
+
+    public void drink(Command command) {
+        if(!command.hasSecondWord()) {
+            // if there is no second word, we don't know what to take
+            System.out.println("¿Beber qué?");
+            return;
+        }
+
+        // Try to take the item
+        String objeto = command.getSecondWord();
+        Item objetoNuevo = null;
+        for (Item itemActual : mochila) {
+            if (itemActual.canYouDrinkIt()) {
+                objetoNuevo = itemActual;
+            }
+        }
+        if (objetoNuevo == null) {
+            System.out.println("¡No puedes beberte eso!");
+        }
+        else {
+            if (objetoNuevo.getId().equals("CK-17")) {
+                capacidad *= 1.25;
+                System.out.println("Te bebes el CK-17; notas como una fuerza interna te posee.");
+                objectsLimit = objectsLimit - 5;
+                mochila.remove(objetoNuevo);
+                Item ck17Empty = new Item("ck17-I", "Es el matraz donde se encontraba el proyecto CK-17; ahora está vacío", 100, true, false);
+                currentRoom.addItem(ck17Empty);
+                currentRoom.delItem(objetoNuevo);
+            }
+            else if (objetoNuevo.getId().equals("clorox")) {
+                System.out.println("Una sabia decisión.");
+                System.out.println("Oh wait. ¿No creerías que sería tan fácil verdad?");
+                System.out.println("Es zumo de arándanos.");
+                System.out.println("Ahora muevete.");
+            }
         }
     }
 }

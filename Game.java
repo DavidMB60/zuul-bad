@@ -29,22 +29,24 @@ public class Game
         parser = new Parser();
         jugador = new Player(createRooms());
     }
-
+    
     /**
      * Create all the rooms and link their exits together.
      */
     private Room createRooms()
     {
         Room spawn, seguridad, contencion, anexo, lobby, recepcion;
-        Room laboratorio, serverRoom, almacen, easterEgg, armeria;
-        Item keycard, phone, hdd, glock9, armarioMuniciones;
+        Room laboratorio, serverRoom, almacen, easterEgg, armeria, salida;
+        Item keycard, phone, hdd, glock9, armarioMuniciones, ck17, clorox;
 
         // Crear los objetos (id, descripcion, peso, loPuedesCoger?)
-        keycard = new Item("keycard", "Tarjeta de seguridad de nivel 3", 100, true);
-        phone = new Item("phone", "Un Samsung Galaxy Note 7; útil para explotar paredes", 150, true);
-        hdd = new Item("hdd", "Disco duro de 10TB, contiene información relacionada con el proyecto CK17", 500, true);
-        glock9 = new Item("glock9", "Glock 9MM cargada", 900, true);
-        armarioMuniciones = new Item("armario", "Armario con municiones y armamento", 25000, false);
+        keycard = new Item("keycard", "Tarjeta de seguridad de nivel 3", 100, true, false);
+        phone = new Item("phone", "Un Samsung Galaxy Note 7; útil para explotar paredes", 150, true, false);
+        hdd = new Item("hdd", "Disco duro de 10TB, contiene información relacionada con el proyecto CK17", 500, true, false);
+        glock9 = new Item("glock9", "Glock 9MM cargada", 900, true, false);
+        armarioMuniciones = new Item("armario", "Armario con municiones y armamento", 25000, false, false);
+        ck17 = new Item("CK-17", "Proyecto CK-17; aumenta de forma indefinida un 25% tu capacidad de carga; por contra partida sólo puedes llevar 3 objetos en tu inventario", 500, true, true);
+        clorox = new Item("clorox", "La mejor bebida del mercado; soluciona todos tus problemas", 500, true, true);
 
         // create the rooms (descripcion, objeto)
 
@@ -59,13 +61,16 @@ public class Game
         almacen = new Room("el almacén del nivel 3");
         easterEgg = new Room("no deberías estar aquí...");
         armeria = new Room("armería de seguridad");
+        salida = new Room("salida");
 
         // Agregar los objetos
         armeria.addItem(glock9);
         armeria.addItem(armarioMuniciones);
         contencion.addItem(keycard);
         laboratorio.addItem(hdd);
+        laboratorio.addItem(ck17);
         spawn.addItem(phone);
+        almacen.addItem(clorox);
 
         // initialise room exits (norte, este, sur, oeste, sureste, noroeste)
         spawn.setExit("este", seguridad);
@@ -81,6 +86,7 @@ public class Game
         lobby.setExit("este", recepcion);
         lobby.setExit("oeste", anexo);
         recepcion.setExit("oeste", recepcion);
+        recepcion.setExit("este", salida);
         almacen.setExit("este", laboratorio);
         laboratorio.setExit("oeste", almacen);
         laboratorio.setExit("sur", seguridad);
@@ -163,6 +169,9 @@ public class Game
         }
         else if (commandWord.equals("soltar")) {
             jugador.dropItem(command);
+        }
+        else if (commandWord.equals("beber")) {
+            jugador.drink(command);
         }
 
         return wantToQuit;

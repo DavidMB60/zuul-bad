@@ -12,16 +12,18 @@ public class Item
     private String descripcion;
     private int peso;
     private boolean canTakeIt;
+    private boolean canYouDrinkIt;
 
     /**
      * Constructor for objects of class Item
      */
-    public Item(String id, String descripcion, int peso, boolean canTakeIt)
+    public Item(String id, String descripcion, int peso, boolean canTakeIt, boolean canYouDrinkIt)
     {
         this.id = id;
         this.descripcion = descripcion;
         this.peso = peso;
         this.canTakeIt = canTakeIt;
+        this.canYouDrinkIt = canYouDrinkIt;
     }
 
     public String getDescripcion() {
@@ -38,5 +40,9 @@ public class Item
 
     public boolean canTakeIt() {
         return canTakeIt;
+    }
+    
+    public boolean canYouDrinkIt() {
+        return canYouDrinkIt;
     }
 }
